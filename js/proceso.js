@@ -5,149 +5,96 @@ async function leerJSON(url) {
     let user = await response.json();
     return user;
   } catch(err) {
-    
+
     alert(err);
   }
 }
 
-
 function mostrar(){
 
-  var titulo = document.getElementById("titulo");
-  var url = "https://raw.githubusercontent.com/madarme/persistencia_2_2020/main/previo2_estudiantes.json?token=ACGYEGDJXZZTV6YIQ3Y5GL3ASQNEG";
-  var resultado = document.getElementById("r");
-  var des = document.getElementById("table_div");
-  
+  let titulo = document.getElementById("titulo");
+  let url = "https://raw.githubusercontent.com/FelipeM09/EJERCICIO_ALUMNO/main/json/estudiantes.json";
 
 
-  leerJSON(url).then(datos => {
-      titulo.innerHTML = "<h1>" + datos.nombreMateria + "</h1>";
-      var alumnos = datos.estudiantes;
-      var descripcion = datos.descripcion;
-      resultado.innerHTML = drawTable(alumnos) ;
+  leerJSON(url).then(datos =>{
+
+    titulo.innerHTML = "<h1>" + datos.nombreMateria + "</h1>";
+    drawTableEstudiantes(datos.estudiantes);
+    drawTableDescripcion(datos.descripcion);
   })
-}
-
-function leerEstudiantes(estudiantes){
-
-  var msg = "";
-
-  for(let i =0; i<estudiantes.length; i++){
-    msg += "<hr>" + "Nombre: " + estudiantes[i].nombre + ", Codigo: " + estudiantes[i].codigo;
-
-    var notas = estudiantes[i].notas;
-    
-    msg += leerNotas(notas);
-    drawTable(estudiantes[i],i);
-  }
-  return msg;
-}
-
-
-function leerEstudiante(estudiante, posicion){
-  // console.log(estudiante[posicion].nombre);
-  // console.log(estudiante[posicion].codigo);
-  // console.log(estudiante[posicion].notas);
-  return estudiante[posicion];
-}
-
-
-
-function leerNotas(notas){
-  var msg ="";
-
-  for(let i =0; i<notas.length; i++){
-    msg += "<br>" + "id: " + notas[i].id + " valor: " + notas[i].valor;
-  }
-
-  return msg;
-}
-
-
-
-
-function descripcionNota(descripcion){
-
-  var msg = "";
-
-  for(let i =0; i<descripcion.length; i++){
-    msg += "<br>" + "el id es: " + descripcion[i].id + " Descripción: " + descripcion[i].descripcion;
-  }
-  return msg;
-}
-
-
-
   
-function drawTable(datos) {
-  
+}
+
+
+
+function drawTableEstudiantes(estudiantes) {
+
   var data = new google.visualization.DataTable();
-
-  let valor =0;
-  let posicion =0;
-  data.addColumn('number', 'CODIGO');
-  data.addColumn('string', 'ESTUDIANTE');
-
-  // let notass = datos[0].notas;
-  // console.log("tamaño " + notass.length);
-
-  for(let i=0; i<datos[0].notas.length; i++){
-     data.addColumn("number", "NOTA");
-  }
-
+  data.addColumn('number', 'CÓDIGO');
+  data.addColumn('string', 'NOMBRE');
   
-  data.addRows(datos.length);
-
- 
-  for(let i=0; i<datos.length; i++){
-    let estudiante = leerEstudiante(datos, i);
-    data.setCell(i,0, estudiante.codigo);
-    data.setCell(i,1, estudiante.nombre);
-
-    for(let j=2; j<=datos[0].notas.length+1; j++){
-      data.setCell(i,j, leerNota(estudiante.notas, posicion));
-      posicion++;
-    }
-    posicion=0;
+  
+  for(let i=0; i<estudiantes[0].notas.length; i++){
+    data.addColumn("number", "NOTA (" + estudiantes[0].notas[i].id + ")");
   }
+
+  data.addColumn("number", "PROMEDIO");
+
+  data.addRows(llenarTabla(estudiantes));
 
   var table = new google.visualization.Table(document.getElementById('table_div'));
 
   table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
 }
 
+function llenarTabla(estudiantes){
+  let arreglo =[];
 
+  for(let i =0; i<estudiantes.length; i++){
+    let estu = estudiantes[i];
 
+    let alumno = [];
 
-function leerNota(notas, posicion){
-  let nota = notas[posicion].valor;
-  return nota;
+    alumno.push(estu.codigo);
+    alumno.push(estu.nombre);
+
+    for(let j=0; j<estudiantes[i].notas.length; j++){
+      alumno.push(estu.notas[j].valor);
+    }
+    alumno.push(calcularPromedio(estu.notas));
+    arreglo.push(alumno);
+  }
+  return arreglo;
 }
 
 
-function calcularPromedio(){
-
+function calcularPromedio(notas){
+  let promedio =0;
+  for(let i=0; i<notas.length; i++){
+    promedio += notas[i].valor;
+  }
+  return (promedio/notas.length);
 }
 
-// function llenarTabla(){
-//   let valores = [];
-
-//   for(let i=0; i<datos.length; i++){
-//     let estudiante = leerEstudiante(datos, i);
-//     data.setCell(i,0, estudiante.codigo);
-//     data.setCell(i,1, estudiante.nombre);
-
-//     for(let j=2; j<=datos[0].notas.length+1; j++){
-//       data.setCell(i,j, leerNota(estudiante.notas, posicion));
-//       posicion++;
-//     }
-//     posicion=0;
-//   }
 
 
-//   return
-// }
+function drawTableDescripcion(descripcion) {
+  var data = new google.visualization.DataTable();
+  data.addColumn('number', 'ID');
+  data.addColumn('string', 'DESCRIPCION');
+  
+  
 
+  data.addRows(descripcion.length);
 
+  for(let i =0; i<descripcion.length; i++){
+    data.setCell(i, 0, descripcion[i].id);
+    data.setCell(i, 1, descripcion[i].descripcion);
+  }
+
+  var table = new google.visualization.Table(document.getElementById('descripcion'));
+
+  table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
+}
 
 mostrar();
