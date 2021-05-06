@@ -3,7 +3,7 @@
     "estudiantes": [
         {
             "codigo": 115100,
-            "nombre": "myc DIECv",
+            "nombre": "Brayan",
             "notas": [
                 {
                     "id": "1",
@@ -69,7 +69,7 @@
         },
         {
             "codigo": 115200,
-            "nombre": "sBz VyUuk",
+            "nombre": "Felipe",
             "notas": [
                 {
                     "id": "1",
@@ -135,7 +135,7 @@
         },
         {
             "codigo": 115300,
-            "nombre": "lna z73PW",
+            "nombre": "Juan",
             "notas": [
                 {
                     "id": "1",
@@ -201,7 +201,7 @@
         },
         {
             "codigo": 115400,
-            "nombre": "O43 gvcOw",
+            "nombre": "Sebastian",
             "notas": [
                 {
                     "id": "1",
@@ -267,7 +267,7 @@
         },
         {
             "codigo": 115500,
-            "nombre": "ZGF sviw7",
+            "nombre": "Santiago",
             "notas": [
                 {
                     "id": "1",
